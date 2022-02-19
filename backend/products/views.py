@@ -1,19 +1,29 @@
 # Create your views here.
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
+from rest_framework import status
 from backend.permissions import IsStaffOrReadOnly
 
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from products.models import Product
 from products.serializers import ProductSerializer
+from rest_framework.decorators import action
 
-class ProductViewSet(ViewSet):
+class ProductViewSet(ModelViewSet):
     queryset=  Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsStaffOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+    @action(methods=['GET'], detail=False, name='Get Lastest Product')
+    def lastest_product(self, request, *args, **kwargs):
+        lastest_4_products = Product.objects.all()[0:3]
+        seriliazer = ProductSerializer(lastest_4_products, many=True)
+        return Response(seriliazer.data, status=status.HTTP_200_OK)
+        
 
 
 # from rest_framework.response import Response

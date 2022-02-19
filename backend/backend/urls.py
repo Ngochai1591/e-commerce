@@ -18,26 +18,23 @@ from django.urls import path,  include
 from rest_framework_simplejwt import views as jwt_views
 from django.conf.urls.static import static
 from django.conf import settings
-from rest_framework.routers import DefaultRouter
+from backend.SharedAPIRootRouter import SharedAPIRootRouter
 
-from products.views import ProductViewSet
-from categories.views import CategoryViewSet
+#Router
+import categories.urls
+import products.urls
 
-router = DefaultRouter()
-router.register('products', ProductViewSet, basename='products')
-router.register('categories', CategoryViewSet, basename='categories')
-
+def api_urls():
+    return SharedAPIRootRouter.shared_router.urls
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(router.urls)),
 
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(),name='token_refresh'),
-    # path('api/', include('categories.urls')),
-    # path('api/', include('products.urls')),
+    path('api/', include(api_urls()))
 ] + static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)
 
 
