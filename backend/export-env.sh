@@ -4,7 +4,7 @@ echo "Export env"
 export DB_NAME=e_commerce
 export DB_USER=e_commerce
 export DB_PASS=asdasd123
-export DB_SERVICE=localhost
+export DB_HOST=db
 export DB_PORT=5432
 
 
