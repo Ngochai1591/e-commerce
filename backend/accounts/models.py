@@ -15,7 +15,7 @@ class MyAccountManager(BaseUserManager):
             username=username,
             first_name = first_name, 
             last_name = last_name,
-            is_staff = True,
+            is_active = True,
             password=password
         )
 
@@ -64,7 +64,7 @@ class Account(AbstractBaseUser):
         return self.email
 
     def has_perm(self, perm, obj=None):
-        return self.is_admin
+        return self.is_staff
 
     def has_module_perms(self, add_label):
         return True

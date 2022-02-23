@@ -19,7 +19,7 @@ class Product(models.Model):
     description = models.TextField(max_length=500, blank=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     image = models.ImageField(upload_to='photos/products/image/', blank=True)
-    stock = models.IntegerField()
+    stock = models.PositiveIntegerField(default=1, null=True, blank=True)
     is_available = models.BooleanField(default=True)
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now_add=True)
