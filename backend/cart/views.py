@@ -62,7 +62,7 @@ class CartViewSet(ModelViewSet):
 
         try:
             product = Product.objects.get(pk=request.data['product_id'])
-            quantity = int(request.data['quantity'])
+            quantity = 1
         except Exception as err:
             print("[ERROR_add_to_cart] " ,err)
             return Response(data={'status':'fail'}, status=status.HTTP_400_BAD_REQUEST)
@@ -85,8 +85,8 @@ class CartViewSet(ModelViewSet):
         serializer = CartSerializer(cart)
         return Response({'cart':serializer.data}, status=status.HTTP_200_OK)
 
-    @action(methods=['POST','PUT'], detail=True, name="remove items from cart")
-    def remove_from_cart(self, request, pk=None):
+    @action(methods=['POST','PUT'], detail=False, name="remove items from cart")
+    def remove_from_cart(self, request):
         """Remove an item from user's cart
         If current quantity less than 1, delete cart_item
         else decrease quantity by 1 
@@ -96,7 +96,13 @@ class CartViewSet(ModelViewSet):
             pk (_type_, optional): _description_. Defaults to None.
         """        
 
-        cart = self.get_object()
+        owner = self.request.user
+        try:
+            cart = Cart.objects.get(owner=owner)
+        except Cart.DoesNotExist:
+            print('[ERROR] Cart not found')
+            raise Http404              
+     
         try:
             product = Product.objects.get(pk=request.data['product_id'])
         except Exception as err:

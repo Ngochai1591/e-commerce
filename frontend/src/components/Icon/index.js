@@ -1,8 +1,8 @@
 import React from 'react';
 import { IconItem } from './styles';
 
-const Icons = ({className}) => {
+const Icon = ({className}) => {
     return <IconItem className={className} />
 }
 
-export default Icons;
+export default Icon;

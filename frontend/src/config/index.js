@@ -1,10 +1,7 @@
-const hostName = 'localhost:8000'
+const hostName = 'localhost:8000/';
+const versionAPIDevelopment = "v1";
 
 const Config = {
-    versionAPIProduction: "v1",
-    versionAPIDevelopment: "v1",
-  
-  
     hostProduction: '',
     hostDevelopement: hostName + versionAPIDevelopment,
     language: "en",

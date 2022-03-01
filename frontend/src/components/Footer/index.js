@@ -1,7 +1,7 @@
 import React from 'react';
 import { Wrapper, Row, Container, Column, Link, Title } from './styles';
 
-import Icons from '../Icons';
+import Icon from '../Icon';
 
 const Footer = () => {
     return (
@@ -31,10 +31,10 @@ const Footer = () => {
                     </Column>
                     <Column>
                         <Title>Social</Title>
-                        <Link href="#"><Icons className="fab fa-facebook-f" />Facebook</Link>
-                        <Link href="#"><Icons className="fab fa-instagram" />Instagram</Link>
-                        <Link href="#"><Icons className="fab fa-youtube" />Youtube</Link>
-                        <Link href="#"><Icons className="fab fa-twitter" />Twitter</Link>
+                        <Link href="#"><Icon className="fab fa-facebook-f" />Facebook</Link>
+                        <Link href="#"><Icon className="fab fa-instagram" />Instagram</Link>
+                        <Link href="#"><Icon className="fab fa-youtube" />Youtube</Link>
+                        <Link href="#"><Icon className="fab fa-twitter" />Twitter</Link>
                     </Column>
                 </Row>
             </Wrapper>
