@@ -10,5 +10,5 @@ class IsStaffOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         return (
             request.method in permissions.SAFE_METHODS or
-            request.user and (request.user.is_staff or request.user.is_superuser)
+            request.user and (request.user.is_staff)
         )
