@@ -24,6 +24,7 @@ from .SharedAPIRootRouter import SharedAPIRootRouter
 import store.urls
 import category.urls
 import cart.urls
+import order.urls
 
 def api_urls():
     return SharedAPIRootRouter.shared_router.urls

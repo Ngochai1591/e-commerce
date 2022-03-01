@@ -1,3 +1,5 @@
+from email.policy import default
+from django.http import Http404
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 
@@ -16,13 +18,27 @@ class CartViewSet(ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
     # permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
-    @action(methods=['PUT', 'POST'], detail=True, name="add to cart")
-    def add_to_cart(self, request, pk=None):
+    #Get user's cart
+    @action(methods=['GET'], detail=False, name="Get User's cart")
+    def get_user_cart(self, request):
+        owner = self.request.user
+        try:
+            user_cart = Cart.objects.get(owner=owner)
+        except Cart.DoesNotExist:
+            print('[ERROR] Cart not found')
+            raise Http404
+            
+        serializer  = CartSerializer(user_cart, many=False)
+
+        return Response({'cart': serializer.data}, status=status.HTTP_200_OK)
+
+    @action(methods=['PUT', 'POST'], detail=False, name="add to cart")
+    def add_to_cart(self, request):
         """Add an item to a user's cart.
 
         Adding to cart is disallowed if there is not enough inventory for the
@@ -37,7 +53,13 @@ class CartViewSet(ModelViewSet):
         Return the updated cart
         """        
 
-        cart = self.get_object()
+        owner = self.request.user
+        try:
+            cart = Cart.objects.get(owner=owner)
+        except Cart.DoesNotExist:
+            print('[ERROR] Cart not found')
+            raise Http404       
+
         try:
             product = Product.objects.get(pk=request.data['product_id'])
             quantity = int(request.data['quantity'])
@@ -61,7 +83,7 @@ class CartViewSet(ModelViewSet):
         
         #return updated cart
         serializer = CartSerializer(cart)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({'cart':serializer.data}, status=status.HTTP_200_OK)
 
     @action(methods=['POST','PUT'], detail=True, name="remove items from cart")
     def remove_from_cart(self, request, pk=None):
